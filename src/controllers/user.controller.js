@@ -85,14 +85,13 @@ const loginUser = asyncHandler(async (req, res) => {
   const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
     user._id
   );
-
   // user.refreshToken = refreshToken; // potential error
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
   const options = {
     httpOnly: true,
-    secure: true,
+    // secure: true,
   };
   return res
     .status(200)
@@ -116,14 +115,14 @@ const logoutUser = asyncHandler(async (req, res) => {
     req.user._id,
     {
       $set: {
-        refreshToken: undefined,
+        refreshToken: null,
       },
     },
     { new: true }
   );
   const options = {
     httpOnly: true,
-    secure: true,
+    // secure: true,
   };
 
   res
