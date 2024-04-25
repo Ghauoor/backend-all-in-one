@@ -15,6 +15,7 @@ const uploadOnCloudinary = async (localFilePath) => {
       resource_type: "auto",
     });
     fs.unlinkSync(localFilePath);
+    // console.log("RESPONSE from uploading Image is -->", response);
     return response;
   } catch (error) {
     fs.unlinkSync(localFilePath); // remove the localSaved file from server
@@ -22,4 +23,17 @@ const uploadOnCloudinary = async (localFilePath) => {
   }
 };
 
-export { uploadOnCloudinary };
+const deleteFromCloudinary = async (imagePublicId) => {
+  try {
+    if (!imagePublicId) return console.log("ImageID is not found");
+    const response = await cloudinary.uploader.destroy(imagePublicId, {
+      resource_type: "auto",
+      invalidate: true,
+    });
+    return response;
+  } catch (error) {
+    console.log("Error while deleting Image from Cloudinary ", error?.message);
+  }
+};
+
+export { uploadOnCloudinary, deleteFromCloudinary };
